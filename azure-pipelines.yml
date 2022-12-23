@@ -19,13 +19,16 @@ steps:
   displayName: 'Run a multi-line script'
 
 
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '3.8'
-  displayName: 'Install Python 3.8'
-- script: pip install checkov
-  displayName: 'Install Checkov'
-- script: checkov -d Prisma --bc-api-key test::test --repo-id https://github.com/adadhore --branch Prisma
-  displayName: 'Scan with Prisma Cloud'
-  env:
-    PRISMA_API_URL: https://ec2-54-234-252-29.compute-1.amazonaws.com:8083/
+task: prisma-cloud-compute-scan@3
+
+displayName: Scan ${{ parameters.destinationImageRepo }}
+
+enabled: true
+
+inputs:
+
+scanType: 'images'
+
+twistlockService: 'PrismaCloudImageScan'
+
+artifact: '${{ parameters.destinationImageRepo }}:${{ parameters.destinationTag }}'
